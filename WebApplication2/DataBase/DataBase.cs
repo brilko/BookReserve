@@ -7,7 +7,7 @@ using LiteDB;
 
 namespace BookReserveWeb
 {
-    internal static class DataBase
+    public static class DataBase
     {
         public static string Name { get => @"ReservingDB.db"; }
         public static readonly CollectionsClass Collections = new CollectionsClass();
@@ -37,7 +37,7 @@ namespace BookReserveWeb
 
             public Dictionary<Type, string> NamesOfCollections = new Dictionary<Type, string>() {
                 [typeof(Author)] = "Authors",
-                [typeof(Book)] = "Books",
+                [typeof(DBBook)] = "Books",
                 [typeof(Reservation)] = "Reservations",
                 [typeof(Return)] = "Returns"
             };

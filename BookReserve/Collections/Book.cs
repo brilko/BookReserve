@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookReserve
+namespace BookReserveWeb
 {
     internal class Book : IDataBaseCollection
     {

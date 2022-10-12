@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookReserveWeb
 {
-    internal class Author : IDataBaseCollection
+    public class Author : IDataBaseCollection
     {
         public int Id { get; set; }
         public string Name { get; set; }

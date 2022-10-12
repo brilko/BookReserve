@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookReserveWeb
 {
-    internal class Return : IDataBaseCollection
+    public class Return : IDataBaseCollection
     {
         public int Id { get; set; }
         public int IdBook { get; set; }

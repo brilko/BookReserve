@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookReserveWeb
 {
-    internal class DataBaseClearAndFill
+    public class DataBaseClearAndFill
     {
         public void ClearAndFill()
         {
@@ -16,13 +16,13 @@ namespace BookReserveWeb
                 new Author("Pushkin"),
                 new Author("Esenin")
             });
-            ClearAndFeelCollection(new Book[] { 
-                new Book("WarAndPeace", 1),
-                new Book("Anna Karenina", 1),
-                new Book("Ruslan i Ludmila", 2),
-                new Book("Evgeniy Onegin", 2),
-                new Book("I don't pity, don't call, don't cry", 3),
-                new Book("A Letter to Mother", 3)
+            ClearAndFeelCollection(new DBBook[] { 
+                new DBBook("WarAndPeace", 1),
+                new DBBook("Anna Karenina", 1),
+                new DBBook("Ruslan i Ludmila", 2),
+                new DBBook("Evgeniy Onegin", 2),
+                new DBBook("I don't pity, don't call, don't cry", 3),
+                new DBBook("A Letter to Mother", 3)
             });
         }
 
