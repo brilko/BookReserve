@@ -10,8 +10,9 @@ namespace BookReserveWeb
     {
         public int Id { get; set; }
         public int IdBook { get; set; }
-        public DateTime DateReturn { get; set; }
-        public Return(int idBook, DateTime dateReturn) { 
+        public string DateReturn { get; set; }
+        public Return(int idBook, string dateReturn)
+        {
             IdBook = idBook;
             DateReturn = dateReturn;
         }

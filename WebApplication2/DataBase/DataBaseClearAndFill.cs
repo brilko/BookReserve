@@ -24,6 +24,8 @@ namespace BookReserveWeb
                 new DBBook("I don't pity, don't call, don't cry", 3),
                 new DBBook("A Letter to Mother", 3)
             });
+            ClearAndFeelCollection(new Reservation[0]);
+            ClearAndFeelCollection(new Return[0]);
         }
 
         private void ClearAndFeelCollection<P>(P[] newData) where P : IDataBaseCollection

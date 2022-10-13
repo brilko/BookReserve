@@ -10,9 +10,10 @@ namespace BookReserveWeb
     {
         public int Id { get; set; }
         public int IdBook { get; set; }
-        public DateTime ReservationDate { get; set; }
+        public string ReservationDate { get; set; }
         public string Comment { get; set; }
-        public Reservation(int idBook, DateTime reservationTime, string comment) { 
+        public Reservation(int idBook, string reservationTime, string comment)
+        {
             IdBook = idBook;
             ReservationDate = reservationTime;
             Comment = comment;

@@ -1,16 +1,31 @@
-﻿namespace BookReserveWeb.Models
+﻿using LiteDB;
+using System.Linq;
+using System.Security.Policy;
+
+namespace BookReserveWeb
 {
     public class WebBook
     {
-        public string Name { get; set; }
+        public int IdBook { get; set; }
+        public string BookName { get; set; }
         public string AuthorName { get; set; }
         public bool IsReserved { get; set; }
 
-        public WebBook(string name, string authorName, bool isReserved)
+        public WebBook(int idBook, string bookName, string authorName, bool isReserved)
         {
-            Name = name;
+            IdBook = idBook;
+            BookName = bookName;
             AuthorName = authorName;
             IsReserved = isReserved;
+        }
+
+        public WebBook(DBBook dbBook, LiteDatabase db) 
+        {
+            var authors = DataBase.GetCollection<Author>(db).FindAll();
+            IdBook = dbBook.Id;
+            BookName = dbBook.Name;
+            AuthorName = authors.Where(a => a.Id == dbBook.IdAuthor).First().Name;
+            IsReserved = dbBook.IsReserved;
         }
     }
 }
