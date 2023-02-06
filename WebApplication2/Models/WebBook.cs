@@ -20,7 +20,7 @@ namespace BookReserveWeb
 
         public WebBook(DBBook dbBook, LiteDatabase db) 
         {
-            var authors = DataBase.GetCollection<Author>(db).FindAll();
+            var authors = DataBaseBad.GetCollection<Author>(db).FindAll();
             IdBook = dbBook.Id;
             BookName = dbBook.Name;
             AuthorName = authors.Where(a => a.Id == dbBook.IdAuthor).First().Name;

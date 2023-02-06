@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace BookReserveWeb
 {
-    public interface IDataBaseCollection {}
+    public interface IDataBaseCollection 
+    {
+        public int Id { get; }
+    }
 }

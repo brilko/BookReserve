@@ -14,19 +14,29 @@ namespace BookReserveWeb
     public class BookReserveController : ControllerBase
     {
         private readonly ILogger<BookReserveController> _logger;
+        private readonly ILibrary library;
 
         public BookReserveController(ILogger<BookReserveController> logger)
         {
             _logger = logger;
         }
 
+
+        private readonly Dictionary<ReservationResults, string> reservationAnswers = new() 
+            { 
+                [ReservationResults.Reserved] = "Reserved",
+                [ReservationResults.AlreadyHadBeenReserved] = "You don`t reserve this book, because book is already reserved",
+                [ReservationResults.BookIsNotExist] = "Book is not existed"  
+            };
         [HttpPost("Reserve")]
         public string ReserveBook(int idBook, string comment)
         {
+            //return reservationAnswers[library.ReserveBook(idBook, comment)];
+
             var isExist = true;
             var isReserved = false;
-            DataBase.DBAct(db => {
-                var bookCol = DataBase.GetCollection<DBBook>(db);
+            DataBaseBad.DBAct(db => {
+                var bookCol = DataBaseBad.GetCollection<DBBook>(db);
                 var dbBook = bookCol.FindById(idBook);
                 if (dbBook == null) {
                     isExist = false;
@@ -36,8 +46,8 @@ namespace BookReserveWeb
                     isReserved = false;
                 } else {
                     isReserved = true;
-                    DataBase.GetCollection<Reservation>(db).
-                        Insert(new Reservation(idBook, 
+                    DataBaseBad.GetCollection<Reservation>(db).
+                        Insert(new Reservation(idBook,
                             DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString(), comment));
                     dbBook.IsReserved = true;
                     bookCol.Update(dbBook);
@@ -53,8 +63,8 @@ namespace BookReserveWeb
         {
             var isBookExist = true;
             var isRemovedReserved = true;
-            DataBase.DBAct((db) => {
-                var booksCollection = DataBase.GetCollection<DBBook>(db);
+            DataBaseBad.DBAct((db) => {
+                var booksCollection = DataBaseBad.GetCollection<DBBook>(db);
                 var book = booksCollection.FindById(bookId);
                 if (book == null) {
                     isBookExist = false;
@@ -64,7 +74,7 @@ namespace BookReserveWeb
                     isRemovedReserved = true;
                     book.IsReserved = false;
                     booksCollection.Update(book);
-                    DataBase.GetCollection<Return>(db).Insert(
+                    DataBaseBad.GetCollection<Return>(db).Insert(
                         new Return(bookId, DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString()));
                 } else {
                     isRemovedReserved = false;
@@ -89,8 +99,8 @@ namespace BookReserveWeb
         private WebBook[] GetBooksByReservedStatus(bool reservedStatus)
         {
             WebBook[] books = new WebBook[0];
-            DataBase.DBAct((db) => {
-                books = DataBase.GetCollection<DBBook>(db).FindAll()
+            DataBaseBad.DBAct((db) => {
+                books = DataBaseBad.GetCollection<DBBook>(db).FindAll()
                     .Where(b => b.IsReserved == reservedStatus)
                     .Select(dbBook => new WebBook(dbBook, db))
                     .ToArray();
@@ -101,23 +111,20 @@ namespace BookReserveWeb
         [HttpGet("StatusHistory")]
         public IActionResult GetStatusHistory(int bookId)
         {
-            StatusOfBook[] statuses = new StatusOfBook[0];
+            StatusOfBook[] statuses = Array.Empty<StatusOfBook>();
             var isDatabaseIntegrity = true;
-            DataBase.DBAct(db => {
-                var reservations = DataBase.GetCollection<Reservation>(db).FindAll()
+            DataBaseBad.DBAct(db => {
+                var reservations = DataBaseBad.GetCollection<Reservation>(db).FindAll()
                     .Where(r => r.IdBook == bookId)
                     .ToArray();
-                var returns = DataBase.GetCollection<Return>(db).FindAll()
+                var returns = DataBaseBad.GetCollection<Return>(db).FindAll()
                     .Where((r) => r.IdBook == bookId)
                     .ToArray();
 
-                switch (reservations.Length - returns.Length) {
-                    case 0:
-                    case 1:
-                        break;
-                    default:
-                        isDatabaseIntegrity = false;
-                        return;
+                var deltaLength = reservations.Length - returns.Length;
+                if (deltaLength < 0 || deltaLength > 1) {
+                    isDatabaseIntegrity = false;
+                    return;
                 }
                 statuses = new StatusOfBook[reservations.Length];
                 for (var i = 0; i < returns.Length; i++) {

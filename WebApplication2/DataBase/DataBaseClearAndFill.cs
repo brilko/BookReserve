@@ -30,7 +30,7 @@ namespace BookReserveWeb
 
         private void ClearAndFeelCollection<P>(P[] newData) where P : IDataBaseCollection
         {
-            DataBase.Act<P>(col => {
+            DataBaseBad.Act<P>(col => {
                 col.DeleteAll();
                 col.Insert(newData);
             });
