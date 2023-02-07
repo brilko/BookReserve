@@ -1,4 +1,5 @@
-﻿using LiteDB;
+﻿using BookReserveWeb.Models.UIModels;
+using LiteDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,48 +15,22 @@ namespace BookReserveWeb
     public class BookReserveController : ControllerBase
     {
         private readonly ILogger<BookReserveController> _logger;
-        private readonly ILibrary library;
+        private readonly ILibrary library = LibraryFactory.Produce();
 
         public BookReserveController(ILogger<BookReserveController> logger)
         {
             _logger = logger;
         }
 
-
-        private readonly Dictionary<ReservationResults, string> reservationAnswers = new() 
-            { 
-                [ReservationResults.Reserved] = "Reserved",
-                [ReservationResults.AlreadyHadBeenReserved] = "You don`t reserve this book, because book is already reserved",
-                [ReservationResults.BookIsNotExist] = "Book is not existed"  
-            };
         [HttpPost("Reserve")]
         public string ReserveBook(int idBook, string comment)
         {
-            //return reservationAnswers[library.ReserveBook(idBook, comment)];
-
-            var isExist = true;
-            var isReserved = false;
-            DataBaseBad.DBAct(db => {
-                var bookCol = DataBaseBad.GetCollection<DBBook>(db);
-                var dbBook = bookCol.FindById(idBook);
-                if (dbBook == null) {
-                    isExist = false;
-                    return;
-                }
-                if (dbBook.IsReserved == true) {
-                    isReserved = false;
-                } else {
-                    isReserved = true;
-                    DataBaseBad.GetCollection<Reservation>(db).
-                        Insert(new Reservation(idBook,
-                            DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString(), comment));
-                    dbBook.IsReserved = true;
-                    bookCol.Update(dbBook);
-                }
-            });
-
-            if (isExist == false) return "Book is not exist";
-            return isReserved ? "Reserved" : "You don`t reserve this book, because book is already reserved";
+            return library.ReserveBook(idBook, comment) switch {
+                ReservationResults.Reserved => "Reserved",
+                ReservationResults.AlreadyHadBeenReserved => "you didn't reserve the book because the book was already reserved",
+                ReservationResults.BookIsNotExist => "The book isn't existed",
+                _ => throw new NotImplementedException("Unexpeted answer of reservation"),
+            };
         }
 
         [HttpPost("RemoveReserve")]

@@ -1,4 +1,5 @@
-﻿using LiteDB;
+﻿using BookReserveWeb.DataBase.Interfaces;
+using LiteDB;
 using System;
 using System.Collections.Generic;
 
@@ -7,18 +8,25 @@ namespace BookReserveWeb
     public class TableLiteDB<P> : ITable<P> where P : IDataBaseCollection
     {
         private readonly string dataBaseName;
-        public LiteDatabase GetDataBase { get => new(dataBaseName); }
+        private LiteDatabase GetDataBase { get => new(dataBaseName); }
+        
+        private static readonly Dictionary<Type, string> namesOfCollections = new() {
+            [typeof(Author)] = "Authors",
+            [typeof(DBBook)] = "Books",
+            [typeof(Reservation)] = "Reservations",
+            [typeof(Return)] = "Returns"
+        };
         public TableLiteDB(string dataBaseName)
         {
             this.dataBaseName = dataBaseName;
         }
 
-        private static readonly object locker = default;
+        private static readonly object locker = new();
         private void TableAct(Action<ILiteCollection<P>> act)
         {
             lock (locker) {
                 using var db = GetDataBase;
-                var collection = db.GetCollection<P>(typeof(P).Name + 's');
+                var collection = db.GetCollection<P>(namesOfCollections[typeof(P)]);
                 act(collection);
             }
         }

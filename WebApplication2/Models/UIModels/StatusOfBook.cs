@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BookReserveWeb
+namespace BookReserveWeb.Models.UIModels
 {
     public class StatusOfBook
     {
@@ -8,9 +8,10 @@ namespace BookReserveWeb
         public string ReturnDate { get; set; }
         public string Comment { get; set; }
 
-        public StatusOfBook(Reservation reservation, Return returning) { 
+        public StatusOfBook(Reservation reservation, Return returning)
+        {
             ReservationDate = reservation.ReservationDate;
-            ReturnDate = returning==null?"No return":returning.DateReturn;
+            ReturnDate = returning == null ? "No return" : returning.DateReturn;
             Comment = reservation.Comment;
         }
     }

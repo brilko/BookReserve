@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookReserveWeb.Models.UIModels;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace BookReserveWeb
