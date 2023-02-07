@@ -1,6 +1,4 @@
-﻿using BookReserveWeb.DataBase.Interfaces;
-
-namespace BookReserveWeb
+﻿namespace BookReserveWeb
 {
     public class DataBaseLiteDB : IDataBase
     {

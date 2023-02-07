@@ -1,9 +1,8 @@
-﻿using BookReserveWeb.DataBase.Interfaces;
-
-namespace BookReserveWeb.DataBase
+﻿namespace BookReserveWeb
 {
     public static class DataBaseFactory
     {
-        public static IDataBase Produce() => new DataBaseLiteDB();
+        private static readonly IDataBase dataBase = new DataBaseLiteDB();
+        public static IDataBase Produce() => dataBase;
     }
 }

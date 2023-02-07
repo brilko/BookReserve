@@ -1,4 +1,4 @@
-﻿namespace BookReserveWeb.Models.UIModels
+﻿namespace BookReserveWeb
 {
     public enum RemovingReservationResults
     {

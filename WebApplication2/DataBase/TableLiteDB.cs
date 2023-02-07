@@ -1,7 +1,7 @@
-﻿using BookReserveWeb.DataBase.Interfaces;
-using LiteDB;
+﻿using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BookReserveWeb
 {
@@ -51,7 +51,10 @@ namespace BookReserveWeb
         public IEnumerable<P> GetMany(Func<P, bool> criteria)
         {
             IEnumerable<P> elements = default;
-            TableAct(col => elements = col.Find(el => criteria(el)));
+            TableAct(col => 
+                elements = col.FindAll()
+                    .Where(el => criteria(el))
+                    .ToArray());
             return elements;
         }
 

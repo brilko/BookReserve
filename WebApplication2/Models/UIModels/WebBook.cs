@@ -1,7 +1,4 @@
-﻿using LiteDB;
-using System.Linq;
-
-namespace BookReserveWeb.Models.UIModels
+﻿namespace BookReserveWeb
 {
     public class WebBook
     {
@@ -18,12 +15,12 @@ namespace BookReserveWeb.Models.UIModels
             IsReserved = isReserved;
         }
 
-        public WebBook(DBBook dbBook, LiteDatabase db)
+        public WebBook(DBBook dbBook)
         {
-            var authors = DataBaseBad.GetCollection<Author>(db).FindAll();
+            var db = DataBaseFactory.Produce();
             IdBook = dbBook.Id;
             BookName = dbBook.Name;
-            AuthorName = authors.Where(a => a.Id == dbBook.IdAuthor).First().Name;
+            AuthorName = db.Authors.GetById(dbBook.IdAuthor).Name;
             IsReserved = dbBook.IsReserved;
         }
     }

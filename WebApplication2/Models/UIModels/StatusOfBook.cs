@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BookReserveWeb.Models.UIModels
+﻿namespace BookReserveWeb
 {
     public class StatusOfBook
     {

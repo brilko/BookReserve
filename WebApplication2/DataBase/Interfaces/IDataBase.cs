@@ -1,4 +1,4 @@
-﻿namespace BookReserveWeb.DataBase.Interfaces
+﻿namespace BookReserveWeb
 {
     public interface IDataBase
     {

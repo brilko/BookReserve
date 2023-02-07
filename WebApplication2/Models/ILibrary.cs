@@ -1,5 +1,4 @@
-﻿using BookReserveWeb.Models.UIModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BookReserveWeb
@@ -8,8 +7,7 @@ namespace BookReserveWeb
     {
         public ReservationResults ReserveBook(int idBook, string comment);
         public RemovingReservationResults RemoveReservation(int bookId);
-        public IEnumerable<WebBook> GetAllReserved();
-        public IEnumerable<WebBook> GetAllNotReserved();
-        public IActionResult GetStatusHistory(int bookId);
+        public IEnumerable<WebBook> GetBooksByReservedStatus(bool reservedStatus);
+        public Tuple<GetHistoryStatusResult, StatusOfBook[]> GetStatusHistory(int bookId);
     }
 }
