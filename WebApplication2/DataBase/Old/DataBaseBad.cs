@@ -13,17 +13,14 @@ namespace BookReserveWeb
 
         public static void Act<P>(Action<ILiteCollection<P>> act) where P : IDataBaseCollection
         {
-            using (var db = GetDataBase) {
-                act(db.GetCollection<P>(Collections.NamesOfCollections[typeof(P)]));
-            }
+            using var db = GetDataBase;
+            act(db.GetCollection<P>(Collections.NamesOfCollections[typeof(P)]));
         }
 
         public static void DBAct(Action<LiteDatabase> act)
         {
-            using (var db = GetDataBase) 
-            {
-                act(db); 
-            }
+            using var db = GetDataBase;
+            act(db);
         }
 
         public static ILiteCollection<P> GetCollection<P>(LiteDatabase db) where P : IDataBaseCollection 
@@ -39,7 +36,7 @@ namespace BookReserveWeb
             public string Reservations { get => "Reservations"; }
             public string Returns { get => "Returns"; }
 
-            public Dictionary<Type, string> NamesOfCollections = new Dictionary<Type, string>() {
+            public Dictionary<Type, string> NamesOfCollections = new() {
                 [typeof(Author)] = "Authors",
                 [typeof(DBBook)] = "Books",
                 [typeof(Reservation)] = "Reservations",
